@@ -1,8 +1,19 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/config"
 
 function Navbar() {
     const { currentUser, isStaff } = useAuth();
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
+
 
     return (
         <nav className="bg-gray-800 text-white p-4">
@@ -12,8 +23,12 @@ function Navbar() {
                     <Link to="/" className="hoover:text-gray-300">Home</Link>
                     {currentUser ? (
                         <>
-                            {isStaff && <Link to="/dashboard" className="hover:text-gray-300">Dashboard</Link>}
-                            <button className="hover:text-gray-300">Logout</button>
+                            {isStaff && (
+                                <Link to="/dashboard" className="hover:text-gray-300">
+                                    Dashboard
+                                </Link>
+                            )}
+                            <button onClick={handleLogout} className="hover:text-gray-300">Logout</button>
                         </>
                     ) : (
                         <>
