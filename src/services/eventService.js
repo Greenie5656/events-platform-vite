@@ -47,6 +47,9 @@ export const fetchAllEvents = async () => {
 
 // Fetch filtered events
 export const fetchFilteredEvents = async (filters = {}, sort = { field: "date", direction: "desc" }) => {
+
+  console.log("Sort options:", sort); // Debug log
+  
   try {
     // Start building the query
     let eventQuery = collection(db, "events");
