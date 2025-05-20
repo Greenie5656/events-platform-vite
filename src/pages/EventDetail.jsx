@@ -1,12 +1,26 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchEventsById } from "../services/eventService";
+import { registerForEvent, cancelRegistration, checkRegistrationStatus } from "../services/registrationService";
+import { useAuth } from "../context/AuthContext";
 
 function EventDetail() {
     const { id } = useParams()
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { currentUser, userRole } = useAuth();
+    const [registrationStatus, setRegistrationStatus] = useState({
+      isRegistered : false,
+      isFull: false,
+      attendeeCount: 0,
+      capacity: null,
+      attendees: []
+    });
+    const [registrationLoading, setRegistrationLoading] = useState(false)
+    const [registrationError, setRegistrationError] = useState(null)
+    const [registrationSuccess, setRegistrationSuccess] = useState(false)
+
 
     useEffect (() => {
         async function getEventDetails() {
@@ -14,6 +28,11 @@ function EventDetail() {
                 setLoading(true);
                 const eventData = await fetchEventsById(id);
                 setEvent(eventData)
+
+                if (currentUser) {
+                  const status = await checkRegistrationStatus(id, currentUser.uid);
+                  setRegistrationStatus(status)
+                }
             } catch (error) {
                 console.error("error:", error);
                 setError(error.message || "Failed to load event details");
@@ -23,7 +42,7 @@ function EventDetail() {
         }
 
         getEventDetails()
-    }, [id]);
+    }, [id, currentUser]);
 
      if (loading) {
     return <div className="text-center py-8">Loading event details...</div>;
@@ -40,24 +59,108 @@ function EventDetail() {
     );
   }
 
-  // Format date and time
-  const formatDate = (date) => {
-    const eventDate = date instanceof Date ? date : new Date(date);
-    return eventDate.toLocaleDateString(undefined, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+const handleRegister = async () => {
+  if (!currentUser) {
+    //redirect to login or show message
+    setRegistrationError("Please log in to register for this event");
+    return;
+  }
+
+  setRegistrationLoading(true);
+  setRegistrationError(null);
+  setRegistrationSuccess(false);
+
+  const result = await registerForEvent (id, currentUser.uid, currentUser.email);
+
+  if (result.success) {
+    setRegistrationSuccess(true);
+    //update registration status
+    const status = await checkRegistrationStatus(id, currentUser.uid)
+    setRegistrationStatus(status);
+
+    //hide success message after 3 seconds
+    setTimeout(() =>setRegistrationSuccess(false), 3000);
+  } else {
+    setRegistrationError(result.error);
+  }
+
+  setRegistrationLoading(false);
+
+};
+
+const handleCancelRegistration = async () => {
+  setRegistrationLoading(true)
+  setRegistrationError(null);
+
+  const result = await cancelRegistration(id, currentUser.uid);
+
+  if (result.success) {
+    //update registration status
+    const status = await checkRegistrationStatus(id, currentUser.uid);
+    setRegistrationStatus(status);
+  } else {
+    setRegistrationError(result.error);
+  }
+
+  setRegistrationLoading(false);
+} ;
+
+// Format date
+const formatDate = (date) => {
+  let eventDate;
   
-  const formatTime = (date) => {
-    const eventDate = date instanceof Date ? date : new Date(date);
-    return eventDate.toLocaleTimeString(undefined, {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  // Handle Firestore Timestamp objects
+  if (date && typeof date.toDate === 'function') {
+    // This is a Firestore Timestamp
+    eventDate = date.toDate();
+  } else if (date instanceof Date) {
+    // Already a Date object
+    eventDate = date;
+  } else if (date) {
+    // Try to parse string or other format
+    try {
+      eventDate = new Date(date);
+    } catch (e) {
+      console.error("Invalid date format:", date);
+      return "Invalid Date";
+    }
+  } else {
+    return "No Date";
+  }
+  
+  return eventDate.toLocaleDateString(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+// Format time with the same approach
+const formatTime = (date) => {
+  let eventDate;
+  
+  // Handle Firestore Timestamp objects
+  if (date && typeof date.toDate === 'function') {
+    eventDate = date.toDate();
+  } else if (date instanceof Date) {
+    eventDate = date;
+  } else if (date) {
+    try {
+      eventDate = new Date(date);
+    } catch (e) {
+      console.error("Invalid date format:", date);
+      return "Invalid Time";
+    }
+  } else {
+    return "No Time";
+  }
+  
+  return eventDate.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
 
   return (
     <div>
@@ -91,10 +194,19 @@ function EventDetail() {
           </div>
           
           <div>
-            <h3 className="text-lg font-medium mb-2">Capacity</h3>
-            <p className="text-gray-700">
-              {event.capacity ? `${event.capacity} attendees` : 'Unlimited'}
-            </p>
+              <h3 className="text-lg font-medium mb-2">Capacity</h3>
+              <p className="text-gray-700">
+                  {event.capacity ? (
+                      <>
+                          {registrationStatus.attendeeCount} / {event.capacity} attendees
+                          {registrationStatus.isFull && (
+                              <span className="ml-2 text-red-500">(Full)</span>
+                          )}
+                      </>
+                  ) : (
+                      'Unlimited'
+                  )}
+              </p>
           </div>
         </div>
         
@@ -102,16 +214,68 @@ function EventDetail() {
           <h3 className="text-lg font-medium mb-2">Description</h3>
           <p className="text-gray-700 whitespace-pre-line">{event.description}</p>
         </div>
-        
-        {/* Registration button - will be implemented in Session 5 */}
-        <div className="flex justify-center mt-8">
-          <button 
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
-            disabled={true}
-          >
-            Registration coming in Session 5
-          </button>
-        </div>
+       
+        <div>
+              {registrationError && (
+                  <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">
+                      {registrationError}
+                  </div>
+              )}
+              
+              {registrationSuccess && (
+                  <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">
+                      You have successfully registered for this event!
+                  </div>
+              )}
+              
+              <div className="flex justify-center mt-8">
+                  {!currentUser ? (
+                      <div className="text-center">
+                          <p className="mb-4 text-gray-600">Please log in to register for this event</p>
+                          <Link to="/login" className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                              Log In
+                          </Link>
+                      </div>
+                  ) : userRole === "member" ? (
+                      registrationStatus.isRegistered ? (
+                          <button 
+                              onClick={handleCancelRegistration}
+                              disabled={registrationLoading}
+                              className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
+                          >
+                              {registrationLoading ? "Processing..." : "Cancel Registration"}
+                          </button>
+                      ) : (
+                          <button 
+                              onClick={handleRegister}
+                              disabled={registrationLoading || registrationStatus.isFull}
+                              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                          >
+                              {registrationLoading ? "Processing..." : registrationStatus.isFull ? "Event Full" : "Register for Event"}
+                          </button>
+                      )
+                  ) : (
+                      // For staff members, show the attendee list
+                      <div className="w-full">
+                          <h3 className="text-lg font-medium mb-4">Registered Attendees</h3>
+                          {registrationStatus.attendees.length === 0 ? (
+                              <p className="text-gray-600">No attendees registered yet</p>
+                          ) : (
+                              <div className="bg-gray-50 p-4 rounded">
+                                  <p className="mb-2 text-gray-700">Total: {registrationStatus.attendees.length}</p>
+                                  <ul className="space-y-2">
+                                      {registrationStatus.attendees.map((attendee, index) => (
+                                          <li key={index} className="text-gray-700">
+                                              {attendee.userEmail}
+                                          </li>
+                                      ))}
+                                  </ul>
+                              </div>
+                          )}
+                      </div>
+                  )}
+              </div>
+          </div>
       </div>
     </div>
   );
