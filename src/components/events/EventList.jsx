@@ -1,6 +1,9 @@
 import EventCard from "./EventCard";
 
 function EventList ({ events, loading, error }) {
+
+    console.log("Events data:", events);
+    
     if (loading) {
         return <div className="text-center py-8">Loading events...</div>
     }
