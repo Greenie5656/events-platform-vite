@@ -5,7 +5,7 @@ import { registerForEvent, cancelRegistration, checkRegistrationStatus } from ".
 import { useAuth } from "../context/AuthContext";
 
 function EventDetail() {
-    const { id } = useParams()
+    const { eventId } = useParams()
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -26,11 +26,11 @@ function EventDetail() {
         async function getEventDetails() {
             try {
                 setLoading(true);
-                const eventData = await fetchEventsById(id);
+                const eventData = await fetchEventsById(eventId);
                 setEvent(eventData)
 
                 if (currentUser) {
-                  const status = await checkRegistrationStatus(id, currentUser.uid);
+                  const status = await checkRegistrationStatus(eventId, currentUser.uid);
                   setRegistrationStatus(status)
                 }
             } catch (error) {
@@ -42,7 +42,7 @@ function EventDetail() {
         }
 
         getEventDetails()
-    }, [id, currentUser]);
+    }, [eventId, currentUser]);
 
      if (loading) {
     return <div className="text-center py-8">Loading event details...</div>;
@@ -70,12 +70,12 @@ const handleRegister = async () => {
   setRegistrationError(null);
   setRegistrationSuccess(false);
 
-  const result = await registerForEvent (id, currentUser.uid, currentUser.email);
+  const result = await registerForEvent (eventId, currentUser.uid, currentUser.email);
 
   if (result.success) {
     setRegistrationSuccess(true);
     //update registration status
-    const status = await checkRegistrationStatus(id, currentUser.uid)
+    const status = await checkRegistrationStatus(eventId, currentUser.uid)
     setRegistrationStatus(status);
 
     //hide success message after 3 seconds
@@ -92,11 +92,11 @@ const handleCancelRegistration = async () => {
   setRegistrationLoading(true)
   setRegistrationError(null);
 
-  const result = await cancelRegistration(id, currentUser.uid);
+  const result = await cancelRegistration(eventId, currentUser.uid);
 
   if (result.success) {
     //update registration status
-    const status = await checkRegistrationStatus(id, currentUser.uid);
+    const status = await checkRegistrationStatus(eventId, currentUser.uid);
     setRegistrationStatus(status);
   } else {
     setRegistrationError(result.error);

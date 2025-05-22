@@ -1,7 +1,7 @@
 // components/events/EventForm.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function EventForm({ onSubmit }) {
+function EventForm({ onSubmit, initialData, isEditing = false }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -9,6 +9,7 @@ function EventForm({ onSubmit }) {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("general");
   const [capacity, setCapacity] = useState("");
+  const [isActive, setIsActive] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -20,6 +21,30 @@ function EventForm({ onSubmit }) {
     { value: "seminar", label: "Seminar" },
     { value: "social", label: "Social" }
   ];
+
+  //if initialData is provided, populate the form for editing
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title || "");
+      
+      // Format date and time from timestamp
+      if (initialData.date) {
+        const eventDate = initialData.date.toDate ? initialData.date.toDate() : new Date(initialData.date);
+        setDate(eventDate.toISOString().split('T')[0]);
+        
+        // Format time as HH:MM
+        const hours = eventDate.getHours().toString().padStart(2, '0');
+        const minutes = eventDate.getMinutes().toString().padStart(2, '0');
+        setTime(`${hours}:${minutes}`);
+      }
+      
+      setLocation(initialData.location || "");
+      setDescription(initialData.description || "");
+      setCategory(initialData.category || "general");
+      setCapacity(initialData.capacity ? initialData.capacity.toString() : "");
+      setIsActive(initialData.isActive !== undefined ? initialData.isActive : true);
+    }
+  }, [initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +66,8 @@ function EventForm({ onSubmit }) {
       location,
       description,
       category,
-      capacity: capacity ? parseInt(capacity) : null
+      capacity: capacity ? parseInt(capacity) : null,
+      isActive: isActive
     };
     
     // Call the onSubmit handler from parent
@@ -50,7 +76,8 @@ function EventForm({ onSubmit }) {
     setLoading(false);
     
     if (result.success) {
-      // Reset form
+      // if not editng reest from
+      if(!isEditing) {
       setTitle("");
       setDate("");
       setTime("");
@@ -58,6 +85,10 @@ function EventForm({ onSubmit }) {
       setDescription("");
       setCategory("general");
       setCapacity("");
+      setSuccess(true);
+      setIsActive(true);
+      }
+
       setSuccess(true);
       
       // Hide success message after 3 seconds
@@ -76,7 +107,7 @@ function EventForm({ onSubmit }) {
       )}
       {success && (
         <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">
-          Event created successfully!
+          Event {isEditing ? "updated" : " created"} successfully!
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -182,6 +213,21 @@ function EventForm({ onSubmit }) {
             required
           ></textarea>
         </div>
+
+        {isEditing && (
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="isActive"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="isActive">
+              Event Active (visible to users)
+            </label>
+          </div>
+        )}
         
         <button
           type="submit"
@@ -190,7 +236,9 @@ function EventForm({ onSubmit }) {
             loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-600"
           }`}
         >
-          {loading ? "Creating Event..." : "Create Event"}
+          {loading
+           ? (isEditing ? "Updating Event..." : "Creating Event...")
+           : (isEditing ? "Update Event" : "Create Event")}
         </button>
       </form>
     </div>

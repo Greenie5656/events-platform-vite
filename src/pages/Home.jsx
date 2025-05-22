@@ -36,13 +36,20 @@ useEffect(() => {
         try {
             // If there are active filters, use the filtered fetch
             if (activeFilters.category !== "all" || activeFilters.startDate || activeFilters.endDate) {
-                console.log("Fetching filtered events with:", activeFilters, activeSort);
-                const filteredEvents = await fetchFilteredEvents(activeFilters, activeSort);
+                // Add onlyActive: true to the filters
+                const filtersWithActive = {
+                    ...activeFilters,
+                    onlyActive: true
+                };
+                
+                console.log("Fetching filtered events with:", filtersWithActive, activeSort);
+                const filteredEvents = await fetchFilteredEvents(filtersWithActive, activeSort);
                 setEvents(filteredEvents);
             } else {
-                // Or just get all events with the current sort
-                console.log("Fetching all events with sort:", activeSort);
-                const allEvents = await fetchAllEvents();
+                // Or just get all ACTIVE events with the current sort
+                console.log("Fetching all active events with sort:", activeSort);
+                // Add onlyActive: true as a filter here too
+                const allEvents = await fetchFilteredEvents({ onlyActive: true }, activeSort);
 
                 // Apply client side sorting if needed
                 const sortedEvents = sortEvents(allEvents, activeSort);
