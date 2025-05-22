@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from"./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import EventDetail from "./pages/EventDetail";
+import EditEvent from "./pages/EditEvent";
 
 // protected route component
 function ProtectedRoute( { children, requiredRole }) {
@@ -34,13 +35,18 @@ function App() {
               <Route path="/" element= {<Home />} />
               <Route path="/login" element= {<Login />} />
               <Route path="/signup" element= {<Signup />} />
+              <Route path="/event/:eventId" element= {<EventDetail />} />
               <Route path="/dashboard" element= {
                 <ProtectedRoute requiredRole="staff">
                 <Dashboard />
                 </ProtectedRoute>
               }
               />
-              <Route path="/event/:id" element={<EventDetail />} />
+              <Route path="/edit-event/:eventId" element= {
+                <ProtectedRoute>
+                  <EditEvent />
+                </ProtectedRoute>
+              } />
             </Routes>
           </main>
           <Footer />

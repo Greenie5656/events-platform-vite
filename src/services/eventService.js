@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, where, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, where, doc, getDoc, updateDoc, deleteDoc, addDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 
 // Function for fetching a single event by ID
@@ -48,7 +48,6 @@ export const fetchAllEvents = async () => {
 // Fetch filtered events
 export const fetchFilteredEvents = async (filters = {}, sort = { field: "date", direction: "desc" }) => {
 
-  console.log("Sort options:", sort); // Debug log
   
   try {
     // Start building the query
@@ -72,6 +71,12 @@ export const fetchFilteredEvents = async (filters = {}, sort = { field: "date", 
       endDate.setHours(23, 59, 59, 999);
       constraints.push(where("date", "<=", endDate));
     }
+
+
+    //Filter by active status (for public view)
+    if (filters.onlyActive) {
+      constraints.push(where("isActive","==", true))
+    }
     
     // Add sorting
     constraints.push(orderBy(sort.field, sort.direction));
@@ -87,5 +92,60 @@ export const fetchFilteredEvents = async (filters = {}, sort = { field: "date", 
   } catch (error) {
     console.error("Error fetching filtered events:", error);
     throw error;
+  }
+};
+
+//Update an existing event
+export const updateEvent = async (eventId, eventData) => {
+  try {
+    const eventRef= doc(db, "events", eventId);
+    await updateDoc(eventRef, eventData);
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating Event:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to update Event"
+    };
+  }
+};
+
+//delete an event
+export const deleteEvent = async (eventId) => {
+  try {
+    await deleteDoc(doc(db, "events", eventId));
+    return { success : true };
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to delete event" 
+    };
+  }
+};
+
+//create a new event
+export const createEvent = async (eventData, userId) => {
+  try {
+    //set default isActive to be true for new events
+    const newEvent = {
+      ...eventData,
+      createdBy: userId,
+      createdAt: new Date(),
+      attendees: [],
+      isActive: true
+    };
+
+    const docRef = await addDoc(collection(db, "events"), newEvent);
+    return {
+      success: true,
+      eventId: docRef.id
+    };
+  } catch (error) {
+    console.error("Error creating Event:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to create event"
+    };
   }
 };
