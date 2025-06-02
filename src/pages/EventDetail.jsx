@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { fetchEventsById } from "../services/eventService";
 import { registerForEvent, cancelRegistration, checkRegistrationStatus } from "../services/registrationService";
 import { useAuth } from "../context/AuthContext";
+import AddToCalendarButton from "../components/calendar/AddToCalendarButton";
 
 function EventDetail() {
     const { eventId } = useParams()
@@ -238,15 +239,23 @@ const formatTime = (date) => {
                       </div>
                   ) : userRole === "member" ? (
                       registrationStatus.isRegistered ? (
-                          <button 
-                              onClick={handleCancelRegistration}
-                              disabled={registrationLoading}
-                              className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50"
-                          >
-                              {registrationLoading ? "Processing..." : "Cancel Registration"}
-                          </button>
-                      ) : (
-                          <button 
+                        <div>
+                            <button 
+                                onClick={handleCancelRegistration}
+                                disabled={registrationLoading}
+                                className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 mb-4"
+                            >
+                                {registrationLoading ? "Processing..." : "Cancel Registration"}
+                            </button>
+                            
+                            {/* Add to Calendar button - only show for registered users */}
+                            <AddToCalendarButton 
+                                event={event} 
+                                disabled={false}
+                            />
+                        </div>
+                    ) : (
+                                              <button 
                               onClick={handleRegister}
                               disabled={registrationLoading || registrationStatus.isFull}
                               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
