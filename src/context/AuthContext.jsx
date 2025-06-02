@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, sendPasswordResetEmail } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
@@ -40,12 +40,17 @@ export function AuthProvider({ children }) {
         return unsubscribe;
     }, []);
 
+    const resetPassword = async (email) => {
+        return sendPasswordResetEmail(auth, email);
+    };
+
     const value = {
         currentUser,
         userRole,
         isStaff: userRole === "staff",
         isMember: userRole === "member",
-        loading
+        loading, 
+        resetPassword
     };
 
     return (

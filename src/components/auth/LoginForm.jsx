@@ -9,8 +9,10 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
+    const [resetMessage, setResetMessage] = useState("");
     const navigate = useNavigate();
-    const { isStaff } = useAuth();
+    const { isStaff, resetPassword } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,10 +41,31 @@ function LoginForm() {
         }
     };
 
+    const handleForgotPassword = async () => {
+        if (!email) {
+            setError("Please enter your email address first");
+            return;
+        }
+
+        setResetLoading(true);
+        setError("");
+        setResetMessage("");
+
+        try {
+            await resetPassword(email);
+            setResetMessage("Password reset email sent! Check your inbox.");
+        } catch (error) {
+            setError("Failed to send reset email. Please check your email address");
+        } finally {
+            setResetLoading(false);
+        }
+    };
+
     return (
         <div className="max-w-md mx-auto">
             <h2 className="text-2xl font-bold mb-4">Log In</h2>
             {error && <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{error}</div>}
+            {resetMessage && <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">{resetMessage}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block mb-1">
@@ -80,6 +103,16 @@ function LoginForm() {
             {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
+
+        <div className="mt-4 text-center">
+            <button
+             onClick={handleForgotPassword}
+             disabled={resetLoading}
+             className="text-blue-500 hover:underline text-sm"
+            >
+                {resetLoading ? "Sending... " : "Forgot Password"}
+            </button>
+            </div>
         </div>
     );
 }
