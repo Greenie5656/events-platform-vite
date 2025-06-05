@@ -63,12 +63,12 @@ function LoginForm() {
 
     return (
         <div className="max-w-md mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Log In</h2>
-            {error && <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{error}</div>}
-            {resetMessage && <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">{resetMessage}</div>}
+            <h2 className="text-2xl font-bold mb-4 text-gunmetal">Log In</h2>
+            {error && <div className="bg-red-50 border border-red-200 text-red-700 p-3 mb-4 rounded-lg">{error}</div>}
+            {resetMessage && <div className="bg-asparagus/10 border border-asparagus/30 text-asparagus p-3 mb-4 rounded-lg">{resetMessage}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block mb-1">
+                <label htmlFor="email" className="block mb-1 text-sm font-medium text-gunmetal">
                     Email
                 </label>
                 <input
@@ -76,12 +76,12 @@ function LoginForm() {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
                     required
                 />
                </div>
                <div>
-               <label htmlFor="password" className="block mb-1">
+               <label htmlFor="password" className="block mb-1 text-sm font-medium text-gunmetal">
                 Password
                 </label>
                 <input
@@ -89,15 +89,15 @@ function LoginForm() {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
                     required
                 />
                 </div>
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full bg-blue-500 text-white py-2 rounded ${
-            loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-600"
+                    className={`w-full bg-asparagus text-snow py-3 rounded-lg font-medium transition-colors duration-200 ${
+            loading ? "opacity-70 cursor-not-allowed" : "hover:bg-gold"
           }`}
           >
             {loading ? "Logging in..." : "Log In"}
@@ -108,7 +108,7 @@ function LoginForm() {
             <button
              onClick={handleForgotPassword}
              disabled={resetLoading}
-             className="text-blue-500 hover:underline text-sm"
+             className="text-asparagus hover:text-gold hover:underline text-sm transition-colors duration-200"
             >
                 {resetLoading ? "Sending... " : "Forgot Password"}
             </button>

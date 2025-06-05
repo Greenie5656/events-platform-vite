@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import EventList from "../components/events/EventList";
 import EventFilters from "../components/events/EventFilters";
 import { fetchAllEvents, fetchFilteredEvents } from "../services/eventService";
+import { Calendar } from "lucide-react";
 
 function Home() {
     const [events, setEvents] = useState([]);
@@ -136,12 +137,15 @@ const sortEvents = (eventsToSort, sort) => {
     });
 };
     return (
+            
+
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Community Events</h1>
+                <h1 className="text-3xl font-bold text-gunmetal flex items-center">
+                    <Calendar className="w-8 h-8 mr-3 text-asparagus" />Community Events</h1>
             </div>
 
-            <p className="mb-6">
+            <p className="mb-6 text-payne-gray">
                 Browse and discover upcoming events in our community. Filter by category or date to find events that interest you.
             </p>
 

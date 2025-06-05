@@ -101,18 +101,18 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
   return (
     <div>
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">
+        <div className="bg-red-50 border border-red-200 text-red-700 p-3 mb-4 rounded-lg">
           {error}
         </div>
       )}
       {success && (
-        <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">
+        <div className="bg-asparagus/10 border border-asparagus/30 text-asparagus p-3 mb-4 rounded-lg">
           Event {isEditing ? "updated" : " created"} successfully!
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="title" className="block mb-1">
+          <label htmlFor="title" className="block mb-1 text-sm font-medium text-gunmetal mb-1">
             Event Title
           </label>
           <input
@@ -120,14 +120,14 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
             required
           />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="date" className="block mb-1">
+            <label htmlFor="date" className="blocblock mb-1 text-sm font-medium text-gunmetal mb-1">
               Date
             </label>
             <input
@@ -135,12 +135,12 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
               id="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
               required
             />
           </div>
           <div>
-            <label htmlFor="time" className="block mb-1">
+            <label htmlFor="time" className="block mb-1 text-sm font-medium text-gunmetal">
               Time
             </label>
             <input
@@ -148,14 +148,14 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
               id="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
               required
             />
           </div>
         </div>
         
         <div>
-          <label htmlFor="location" className="block mb-1">
+          <label htmlFor="location" className="block mb-1 text-sm font-medium text-gunmetal">
             Location
           </label>
           <input
@@ -163,20 +163,20 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
             id="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
             required
           />
         </div>
         
         <div>
-          <label htmlFor="category" className="block mb-1">
+          <label htmlFor="category" className="block mb-1 text-sm font-medium text-gunmetal">
             Category
           </label>
           <select
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
           >
             {categoryOptions.map(option => (
               <option key={option.value} value={option.value}>
@@ -187,7 +187,7 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
         </div>
         
         <div>
-          <label htmlFor="capacity" className="block mb-1">
+          <label htmlFor="capacity" className="block mb-1 text-sm font-medium text-gunmetal">
             Capacity (optional)
           </label>
           <input
@@ -195,20 +195,20 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
             id="capacity"
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
             min="1"
           />
         </div>
         
         <div>
-          <label htmlFor="description" className="block mb-1">
+          <label htmlFor="description" className="block mb-1 text-sm font-medium text-gunmetal">
             Description
           </label>
           <textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
             rows="4"
             required
           ></textarea>
@@ -221,9 +221,9 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
               id="isActive"
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
-              className="mr-2"
+              className="mr-2 text-asparagus focus:ring-asparagus"
             />
-            <label htmlFor="isActive">
+            <label htmlFor="isActive" className="text-sm text-gunmetal">
               Event Active (visible to users)
             </label>
           </div>
@@ -232,8 +232,8 @@ function EventForm({ onSubmit, initialData, isEditing = false }) {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full bg-blue-500 text-white py-2 rounded ${
-            loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-600"
+          className={`w-full bg-asparagus text-snow py-3 rounded-lg font-medium transition-colors duration-200 ${
+            loading ? "opacity-70 cursor-not-allowed" : "hover:bg-gold"
           }`}
         >
           {loading

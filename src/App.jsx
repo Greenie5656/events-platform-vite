@@ -13,7 +13,11 @@ import EditEvent from "./pages/EditEvent";
 function ProtectedRoute( { children, requiredRole }) {
   const { currentUser, userRole, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (
+    <div className="min-h-screen bg-snow flex items-center justify-center">
+      <div className="text-gunmetal text-lg font-medium">Loading...</div>
+    </div>
+  );
 
   if (!currentUser) return <Navigate to="/login" />;
 
@@ -28,9 +32,9 @@ function App() {
   return  (
     <BrowserRouter>
       <AuthProvider>
-        <div className="app">
+        <div className="min-h-screen bg-snow font-roboto text-gunmetal flex flex-col">
           <Navbar />
-          <main className="container mx-auto px-4 py-8">
+          <main className="flex-1 max-w-6xl mx-auto px-6 py-12 w-full">
             <Routes>
               <Route path="/" element= {<Home />} />
               <Route path="/login" element= {<Login />} />
@@ -51,7 +55,6 @@ function App() {
           </main>
           <Footer />
         </div>
-
       </AuthProvider>
     </BrowserRouter>
   );

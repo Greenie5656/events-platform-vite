@@ -51,7 +51,7 @@ function EventFilters({ onFilterChange, onSortChange, categories }) {
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-payne-gray/40 rounded px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus"
             >
               <option value="all">All Categories</option>
               {categories.map(cat => (
@@ -72,7 +72,7 @@ function EventFilters({ onFilterChange, onSortChange, categories }) {
               id="startDate"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-payne-gray/40 rounded px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus"
             />
           </div>
           
@@ -85,7 +85,7 @@ function EventFilters({ onFilterChange, onSortChange, categories }) {
               id="endDate"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border border-payne-gray/40 rounded px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus"
             />
           </div>
         </div>
@@ -99,7 +99,7 @@ function EventFilters({ onFilterChange, onSortChange, categories }) {
               id="sort"
               value={sortOption}
               onChange={handleSortChange}
-              className="w-full md:w-auto border rounded px-3 py-2"
+              className="w-full border border-payne-gray/40 rounded px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus"
             >
               <option value="date-asc">Upcoming Events First</option>
               <option value="date-desc">Later Events First</option>
@@ -112,13 +112,13 @@ function EventFilters({ onFilterChange, onSortChange, categories }) {
             <button
               type="button"
               onClick={handleClearFilters}
-              className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border border-payne-gray/40 rounded text-gunmetal hover:bg-snow transition-colors duration-200"
             >
               Clear
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-asparagus text-snow rounded hover:bg-gold transition-colors duration-200"
             >
               Apply Filters
             </button>

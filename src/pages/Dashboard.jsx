@@ -6,6 +6,7 @@ import EventForm from "../components/events/EventForm";
 import EventManagement from "../components/dashboard/EventManagement";
 import AttendeeList from "../components/dashboard/AttendeeList";
 import { createEvent } from "../services/eventService";
+import { Settings } from "lucide-react";
 
 function Dashboard() {
     const { currentUser } = useAuth();
@@ -84,39 +85,42 @@ function Dashboard() {
 
     return (
         <div className="space-y-8 max-w-4xl mx-auto py-8 px-4">
-            <h1 className="text-3xl font-bold mb-6">Staff Dashboard</h1>
+            <h1 className="text-3xl font-bold mb-6 text-gunmetal flex items-center">
+                <Settings className="w-8 h-8 mr-3 text-asparagus" />
+                Staff Dashboard
+            </h1>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Create New Event</h2>
+            <div className="bg-white border border-payne-gray/30 p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 text-gunmetal">Create New Event</h2>
                 <EventForm onSubmit={handleCreateEvent} />
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Your Events</h2>
+            <div className="bg-white border border-payne-gray/30 p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4 text-gunmetal">Your Events</h2>
                 {loading && events.length === 0 ? (
-                    <p className="text-gray-500">Loading your Events...</p>
+                    <p className="text-payne-gray">Loading your Events...</p>
                 ) : error ? (
                     <p className="text-red-500">{error}</p>
                 ) : events.length === 0 ? (
-                    <p className="text-gray-500">You haven't created any events yet.</p>
+                    <p className="text-payne-gray">You haven't created any events yet.</p>
                 ) : (
                     <div className="space-y-6">
                         {events.map(event => (
-                            <div key={event.id} className="border-b pb-6 last:border-b-0">
+                            <div key={event.id} className="border-b border-payne-gray/20 pb-6 last:border-b-0">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h3 className="font-medium text-lg">
+                                        <h3 className="font-medium text-lg text-gunmetal">
                                             {event.title}
                                         </h3>
-                                        <p className="text-sm text-gray-600">
+                                        <p className="font-medium text-lg text-gunmetal">
                                             {event.date?.toDate().toLocaleDateString() || "No Date"} at {event.location}
                                         </p>
                                         <p className="text-sm mt-1">
-                                            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                                            <span className="bg-asparagus/20 text-asparagus px-2 py-1 rounded-full text-xs font-medium">
                                                 {event.category}
                                             </span>
                                             {event.capacity && (
-                                                <span className="ml-2 text-gray-600">
+                                                <span className="mml-2 text-payne-gray">
                                                     {event.attendees?.length || 0}/{event.capacity} registered
                                                 </span>
                                             )}
