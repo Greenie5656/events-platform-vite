@@ -4,6 +4,7 @@ import { fetchEventsById } from "../services/eventService";
 import { registerForEvent, cancelRegistration, checkRegistrationStatus } from "../services/registrationService";
 import { useAuth } from "../context/AuthContext";
 import AddToCalendarButton from "../components/calendar/AddToCalendarButton";
+import { ArrowLeft } from "lucide-react";
 
 function EventDetail() {
     const { eventId } = useParams()
@@ -166,37 +167,35 @@ const formatTime = (date) => {
   return (
     <div>
       <div className="mb-6">
-        <Link to="/" className="text-blue-500 hover:underline flex items-center">
-          <svg className="w-4 h-4 mr-1" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-          </svg>
+        <Link to="/" className="text-asparagus hover:text-gold hover:underline flex items-center transition-colors duration-200">
+          <ArrowLeft className="w-4 h-4 mr-1" />
           Back to Events
         </Link>
       </div>
       
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white border border-payne-gray/30 p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-start mb-4">
-          <h1 className="text-3xl font-bold text-gray-800">{event.title}</h1>
-          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full capitalize">
+          <h1 className="text-3xl font-bold text-gunmetal">{event.title}</h1>
+          <span className="bg-asparagus/20 text-asparagus px-3 py-1 rounded-full capitalize font-medium">
             {event.category}
           </span>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div>
-            <h3 className="text-lg font-medium mb-2">Date & Time</h3>
-            <p className="text-gray-700">{formatDate(event.date)}</p>
-            <p className="text-gray-700">{formatTime(event.date)}</p>
+            <h3 className="text-lg font-medium mb-2 text-gunmetal">Date & Time</h3>
+            <p className="text-payne-gray">{formatDate(event.date)}</p>
+            <p className="text-payne-gray">{formatTime(event.date)}</p>
           </div>
           
           <div>
-            <h3 className="text-lg font-medium mb-2">Location</h3>
-            <p className="text-gray-700">{event.location}</p>
+            <h3 className="text-lg font-medium mb-2 text-gunmetal">Location</h3>
+            <p className="text-payne-gray">{event.location}</p>
           </div>
           
           <div>
-              <h3 className="text-lg font-medium mb-2">Capacity</h3>
-              <p className="text-gray-700">
+              <h3 className="text-lg font-medium mb-2 text-gunmetal">Capacity</h3>
+              <p className="text-payne-gray">
                   {event.capacity ? (
                       <>
                           {registrationStatus.attendeeCount} / {event.capacity} attendees
@@ -218,13 +217,13 @@ const formatTime = (date) => {
        
         <div>
               {registrationError && (
-                  <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">
+                  <div className="bg-red-50 border border-red-200 text-red-700 p-3 mb-4 rounded-l">
                       {registrationError}
                   </div>
               )}
               
               {registrationSuccess && (
-                  <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">
+                  <div className="bg-asparagus/10 border border-asparagus/30 text-asparagus p-3 mb-4 rounded-lg">
                       You have successfully registered for this event!
                   </div>
               )}
@@ -233,7 +232,7 @@ const formatTime = (date) => {
                   {!currentUser ? (
                       <div className="text-center">
                           <p className="mb-4 text-gray-600">Please log in to register for this event</p>
-                          <Link to="/login" className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                          <Link to="/login" className="px-6 py-3 bg-asparagus text-snow rounded-lg hover:bg-gold transition-colors duration-200">
                               Log In
                           </Link>
                       </div>
@@ -243,7 +242,7 @@ const formatTime = (date) => {
                             <button 
                                 onClick={handleCancelRegistration}
                                 disabled={registrationLoading}
-                                className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 mb-4"
+                                className="px-6 py-3 bg-asparagus text-snow rounded-lg hover:bg-gold disabled:opacity-50 transition-colors duration-200"
                             >
                                 {registrationLoading ? "Processing..." : "Cancel Registration"}
                             </button>
@@ -258,7 +257,7 @@ const formatTime = (date) => {
                                               <button 
                               onClick={handleRegister}
                               disabled={registrationLoading || registrationStatus.isFull}
-                              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                              className="px-6 py-3 bg-asparagus text-snow rounded-lg hover:bg-gold disabled:opacity-50 disabled:bg-payne-gray/30 disabled:text-payne-gray transition-colors duration-200"
                           >
                               {registrationLoading ? "Processing..." : registrationStatus.isFull ? "Event Full" : "Register for Event"}
                           </button>
@@ -270,7 +269,7 @@ const formatTime = (date) => {
                           {registrationStatus.attendees.length === 0 ? (
                               <p className="text-gray-600">No attendees registered yet</p>
                           ) : (
-                              <div className="bg-gray-50 p-4 rounded">
+                              <div className="bg-snow/50 border border-payne-gray/30 p-4 rounded-lg">
                                   <p className="mb-2 text-gray-700">Total: {registrationStatus.attendees.length}</p>
                                   <ul className="space-y-2">
                                       {registrationStatus.attendees.map((attendee, index) => (

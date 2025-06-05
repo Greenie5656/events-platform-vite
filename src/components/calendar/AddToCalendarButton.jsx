@@ -1,5 +1,6 @@
 // components/calendar/AddToCalendarButton.jsx
 import { useState } from 'react';
+import { Calendar, Check, AlertCircle } from 'lucide-react';
 import calendarService from '../../services/calendarService';
 
 function AddToCalendarButton({ event, disabled = false }) {
@@ -32,33 +33,45 @@ function AddToCalendarButton({ event, disabled = false }) {
 
   return (
     <div className="mt-4">
+      {/* Error State */}
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 mb-4 rounded text-sm">
-          {error}
+        <div className="bg-red-50 border border-red-200 text-red-700 p-3 mb-4 rounded-lg text-sm flex items-start">
+          <AlertCircle className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+          <span>{error}</span>
         </div>
       )}
       
+      {/* Success State */}
       {success && (
-        <div className="bg-green-100 text-green-700 p-3 mb-4 rounded text-sm">
-          ✅ Event successfully added to your Google Calendar!
+        <div className="bg-asparagus/10 border border-asparagus/20 text-asparagus p-3 mb-4 rounded-lg text-sm flex items-start">
+          <Check className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+          <span>Event successfully added to your Google Calendar!</span>
         </div>
       )}
       
+      {/* Main Button */}
       <button
         onClick={handleAddToCalendar}
         disabled={disabled || loading}
         className={`
-          flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium
+          flex items-center justify-center w-full px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200
           ${disabled 
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-            : 'bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2'
+            ? 'bg-payne-gray/30 text-payne-gray cursor-not-allowed' 
+            : 'bg-asparagus text-snow hover:bg-asparagus/90 focus:outline-none focus:ring-2 focus:ring-asparagus focus:ring-offset-2 active:bg-asparagus/80'
           }
-          ${loading ? 'opacity-70' : ''}
+          ${loading ? 'opacity-70 cursor-wait' : ''}
         `}
+        aria-label={loading ? 'Adding event to calendar' : 'Add event to Google Calendar'}
       >
         {loading ? (
           <>
-            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg 
+              className="animate-spin -ml-1 mr-2 h-4 w-4 text-snow" 
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -66,15 +79,14 @@ function AddToCalendarButton({ event, disabled = false }) {
           </>
         ) : (
           <>
-            <svg className="w-4 h-4 mr-2" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
+            <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />
             Add to Google Calendar
           </>
         )}
       </button>
       
-      <p className="text-xs text-gray-500 mt-2">
+      {/* Helper Text */}
+      <p className="text-xs text-payne-gray mt-2 text-center">
         You'll be prompted to sign in to Google if needed
       </p>
     </div>

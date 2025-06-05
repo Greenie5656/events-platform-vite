@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown, Users } from "lucide-react";
 
 function AttendeeList({ eventId, attendees = [] }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -6,7 +7,7 @@ function AttendeeList({ eventId, attendees = [] }) {
     //no attendees
     if(!attendees.length){
         return (
-            <div className="text-sm text-gray-500 mt-2">
+            <div className="text-sm text-payne-gray mt-2">
                 No attendees yet
             </div>
         );
@@ -15,29 +16,22 @@ function AttendeeList({ eventId, attendees = [] }) {
     return (
         <div className="mt-2">
             <button
-            onClick={()=> setIsExpanded(!isExpanded)}
-            className="text-sm text-blue-600 hover:underline flex items-center">
-                    {isExpanded? "Hide" : "Show"} Attendees ({attendees.length})
-                    <svg 
-                        className={`ml-1 transform ${isExpanded ? 'rotate-180' : ''}`} 
-                        width="12" 
-                        height="12" 
-                        viewBox="0 0 12 12" 
-                        fill="none" 
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-sm text-asparagus hover:text-gold hover:underline flex items-center transition-colors duration-200"
+            >
+            <Users className="w-4 h-4 mr-1" />
+            {isExpanded ? "Hide" : "Show"} Attendees ({attendees.length})
+            <ChevronDown className={`ml-1 w-3 h-3 transform transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
             </button>
 
             {isExpanded && (
-                <div className="mt-2 border rounded p-3 bg-gray-50">
-                    <h4 className="font-medium mb-2">Registered Attendees</h4>
+                <div className="mt-2 border border-payne-gray/30 rounded-lg p-3 bg-snow/50">
+                    <h4 className="font-medium mb-2 text-gunmetal">Registered Attendees</h4>
                     <ul className="text-sm space-y-1">
                         {attendees.map((attendee, index) => (
                             <li key={index} className="flex justify-between">
                                 <span>{attendee.userEmail}</span>
-                                <span className="text-gray-500">
+                                <span className="text-payne-gray">
                                     {attendee.registeredAt?.toDate().toLocaleDateString() || "Unknown Date"}
                                 </span>
                             </li>

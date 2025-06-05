@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { db } from "../../firebase/config";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { ToggleLeft, ToggleRight, Edit3, Trash2 } from "lucide-react";
 
 function EventManagement({ event, onEventUpdated, onEventDeleted }) {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -52,30 +53,38 @@ function EventManagement({ event, onEventUpdated, onEventDeleted }) {
     return (
         <div className="flex items-center space-x-2 mt-2">
             <button
-            onClick={toggleEventStatus}
-            disabled={isTogglingStatus}
-            className={`px-3 py-1 rounded text-sm ${
-          event.isActive 
-            ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-            : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-        }`}
-        >
-            {isTogglingStatus ? "Updating..." : event.isActive? "Active" : "Inactive" }
-        </button>
-
-        <button
-            onClick={() => window.location.href = `/edit-event/${event.id}`}
-            className="px-3 py-1 bg-blue-100 text-blue-800 rounded text-sm hover:bg-blue-200"
+                onClick={toggleEventStatus}
+                disabled={isTogglingStatus}
+                className={`flex items-center px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    event.isActive 
+                        ? 'bg-asparagus/20 text-asparagus hover:bg-asparagus/30' 
+                        : 'bg-payne-gray/20 text-payne-gray hover:bg-payne-gray/30'
+                }`}
             >
-             Edit
-        </button>
+                {event.isActive ? (
+                    <ToggleRight className="w-4 h-4 mr-1" />
+                ) : (
+                    <ToggleLeft className="w-4 h-4 mr-1" />
+                )}
+                {isTogglingStatus ? "Updating..." : event.isActive ? "Active" : "Inactive"}
+            </button>
 
-        <button
-            onClick={deleteEvent}
-            disabled={isDeleting}
-            className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm hover:bg-red-200">
-                    {isDeleting ? "Deleting..." : "Delete"}
-        </button>
+            <button
+                onClick={() => window.location.href = `/edit-event/${event.id}`}
+                className="flex items-center px-3 py-1 bg-gold/20 text-gold rounded-lg text-sm font-medium hover:bg-gold/30 transition-colors duration-200"
+            >
+                <Edit3 className="w-4 h-4 mr-1" />
+                Edit
+            </button>
+
+            <button
+                onClick={deleteEvent}
+                disabled={isDeleting}
+                className="flex items-center px-3 py-1 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors duration-200"
+            >
+                <Trash2 className="w-4 h-4 mr-1" />
+                {isDeleting ? "Deleting..." : "Delete"}
+            </button>
         </div>
     );
 }

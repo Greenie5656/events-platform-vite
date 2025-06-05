@@ -63,11 +63,11 @@ function SignupForm () {
 
     return (
         <div className="max-w-md mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Create an Account</h2>
-            {error && <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{error}</div>}
+            <h2 className="text-2xl font-bold mb-4 text-gunmetal">Join the Community</h2>
+            {error && <div className="bg-red-50 border border-red-200 text-red-700 p-3 mb-4 rounded-lg">{error}</div>}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label htmlFor="name" className="block mb-1">
+                    <label htmlFor="name" className="block mb-1 text-sm font-medium text-gunmetal">
                         Full Name
                     </label>
                     <input
@@ -75,12 +75,12 @@ function SignupForm () {
                         id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full border rounded px-3 py-2"
+                        className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
                         required
                         />
                 </div>
                 <div>
-                    <label htmlFor="email" className="block mb-1">
+                    <label htmlFor="email" className="block mb-1 text-sm font-medium text-gunmetal">
                         Email
                     </label>
                     <input
@@ -88,12 +88,12 @@ function SignupForm () {
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full border rounded px-3 py-2"
+                        className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
                         required
                         />
                 </div>
                 <div>
-                    <label htmlFor="password" className="block mb-1">
+                    <label htmlFor="password" className="block mb-1 text-sm font-medium text-gunmetal">
                         Password
                     </label>
                     <input 
@@ -101,12 +101,12 @@ function SignupForm () {
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full border rounded px-3 py-2"
+                        className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
                         required
                         />
                 </div>
                 <div>
-                    <label htmlFor="confirmPassword" className="block mb-1">
+                    <label htmlFor="confirmPassword" className="block mb-1 text-sm font-medium text-gunmetal">
                         Confirm Password
                     </label>
                     <input
@@ -114,30 +114,30 @@ function SignupForm () {
                         id="confirmPassword"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full border rounded px-3 py-2"
+                        className="w-full border border-payne-gray/40 rounded-lg px-3 py-2 focus:border-asparagus focus:outline-none focus:ring-1 focus:ring-asparagus transition-colors duration-200"
                         required
                     />
                 </div>
                 <div>
-                    <label className="block mb-1">Account Type</label>
+                    <label className="block mb-1 text-sm font-medium text-gunmetal">Account Type</label>
                     <div className="flex space-x-4">
-                        <label className="flex items-center">
+                        <label className="flex items-center text-sm text-gunmetal">
                             <input
                             type="radio"
                             value="member"
                             checked={role=== "member"}
                             onChange={() => setRole("member")}
-                            className="mr-2"
+                            className="mr-2 text-asparagus focus:ring-asparagus"
                         />
                         Community Member
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center text-sm text-gunmetal">
                             <input
                             type="radio"
                             value="staff"
                             checked={role=== "staff"}
                             onChange={() => setRole("staff")}
-                            className="mr-2"
+                            className="mr-2 text-asparagus focus:ring-asparagus"
                         />
                         Event Organizer (Staff)
                         </label>
@@ -146,8 +146,8 @@ function SignupForm () {
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full bg-blue-500 text-white py-2 rounded ${
-            loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-600"
+                    className={`w-full bg-asparagus text-snow py-3 rounded-lg font-medium transition-colors duration-200 ${
+  loading ? "opacity-70 cursor-not-allowed" : "hover:bg-gold"
           }`}
           >
             {loading? "Creating Account..." : "Sign Up"}

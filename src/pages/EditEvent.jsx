@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { fetchEventById, updateEvent } from "../services/eventService";
 import EventForm from "../components/events/EventForm";
+import { Edit3 } from "lucide-react";
 
 function EditEvent() {
     const { eventId } = useParams();
@@ -61,16 +62,16 @@ function EditEvent() {
     };
 
     if(loading && !event) {
-        return <div className="text-center py-8">Loading event data...</div>
+        return <div className="text-center py-8 text-payne-gray">Loading event data...</div>
     }
 
     if (error) {
         return (
-            <div className="bg-red-100 text-red-700 p-4 rounded my-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg my-4">
                 <p>{error}</p>
                 <button
                     onClick={() => navigate("/dashboard")}
-                    className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                    className="mt-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200"
                 >
                     Back to Dashboard
                 </button>
@@ -81,17 +82,20 @@ function EditEvent() {
     return (
         <div className="max-w-3xl mx-auto py-8 px-4">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold">Edit Event</h1>
+                <h1 className="text-2xl font-bold text-gunmetal flex items-center">
+                    <Edit3 className="w-6 h-6 mr-2 text-asparagus" />
+                    Edit Event
+                </h1>
                 <button
                     onClick={() =>  navigate("/dashboard")}
-                    className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+                    className="bg-payne-gray/20 text-payne-gray px-4 py-2 rounded-lg hover:bg-payne-gray/30 transition-colors duration-200"
                 >
                     Cancel
                 </button>
             </div>
 
             {event && (
-                <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="bg-white border border-payne-gray/30 p-6 rounded-lg shadow-md">
                     <EventForm
                      initialData={event}
                      onSubmit={handleUpdateEvent}
