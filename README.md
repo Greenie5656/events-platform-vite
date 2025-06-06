@@ -1,12 +1,55 @@
-# React + Vite
+Eventra Beta
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A community events platform that allows staff members to create and manage events whilst enabling community members to browse, register, and add events to their calendars.
 
-Currently, two official plugins are available:
+🚀 Live Demo
+Try it now: https://events-platform-4657b.web.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Test Accounts
 
-## Expanding the ESLint configuration
+Staff Account (Event Organiser):
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Email: staff@eventra.demo
+Password: demo123
+
+Community Member Account:
+
+Email: member@eventra.demo
+Password: demo123
+
+✨ Key Features
+
+Browse Events: View community events with filtering options
+Event Registration: Sign up for events (community members)
+Google Calendar Integration: Add events to your calendar
+Event Management: Create and manage events (staff only)
+Responsive Design: Works on desktop, tablet, and mobile
+
+🛠️ Built With
+
+React + Vite
+Firebase (Authentication & Firestore)
+Google Calendar API
+Tailwind CSS
+
+📱 How to Test
+
+Visit the live demo
+Sign in with either test account above
+As a community member: Browse events, register for events, add to calendar
+As staff: Create new events, manage attendees, view analytics
+
+📅 To Test Google Calendar Integration:
+
+Register for an event as a community member
+Click "Add to Google Calendar"
+Note: You'll need to sign in with your own Google account to test the calendar integration (the demo accounts don't have Google Calendar access)
+
+🎯 Project Requirements Met
+
+✅ Display list of events for users to browse
+✅ Allow members to sign up for events
+✅ Google Calendar integration after registration
+✅ Staff authentication and event management
+✅ Responsive design and accessibility
+✅ Hosted and publicly accessible
