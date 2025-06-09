@@ -2,8 +2,12 @@ Eventra Beta
 
 A community events platform that allows staff members to create and manage events whilst enabling community members to browse, register, and add events to their calendars.
 
-🚀 Live Demo
+🚀 Live Demo 
 Try it now: https://events-platform-4657b.web.app
+
+🎥 Video Walkthrough
+Take a guided tour of the Eventra Beta and see how it works step by step:  
+[Watch on YouTube](https://www.youtube.com/watch?v=qGmtUsUUwm4)
 
 Test Accounts
 
